@@ -117,6 +117,7 @@ namespace FullscreenLockConv
         public RECT normalPosition;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
     public static class WindowPlacement
     {
         private static Encoding encoding = new UTF8Encoding();
@@ -125,6 +126,8 @@ namespace FullscreenLockConv
         private const int SW_SHOWNORMAL = 1;
         private const int SW_SHOWMINIMIZED = 2;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA3075:Insecure DTD processing in XML", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5369:Use XmlReader For Deserialize", Justification = "<Pending>")]
         public static void SetPlacement(IntPtr windowHandle, string placementXml)
         {
             if (string.IsNullOrEmpty(placementXml))
