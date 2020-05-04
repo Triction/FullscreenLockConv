@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.IO.IsolatedStorage;
 using System.Text.Json;
 using System.Timers;
 using System.Windows;
@@ -48,28 +47,29 @@ namespace FullscreenLockConv
         private string toolTipUnpinned;
 
         // Start up and settings
-        bool autoSaveOnExit;
-        bool startAltSearch;
-        bool startExtended;
-        bool startMuted;
-        bool startPaused;
-        bool startPinned;
-        double startPollingRate;
-        string startSearchTarget;
-        bool rememberSearchTarget;
+        private bool autoSaveOnExit;
+        private bool startAltSearch;
+        private bool startExtended;
+        private bool startMuted;
+        private bool startPaused;
+        private bool startPinned;
+        private double startPollingRate;
+        private string startSearchTarget;
+        private bool rememberSearchTarget;
 
         // Run-time checks
         // AltSearch is Process Search mode
-        bool isAltSearch;
-        bool isExtended;
-        bool isMouseCaptured;
-        bool isMuted;
-        bool isPaused;
-        bool isPinned;
+        private bool isAltSearch;
+        private bool isExtended;
+        private bool isMouseCaptured;
+        private bool isMuted;
+        private bool isPaused;
+        private bool isPinned;
 
         private bool isDisposed;
 
-        private AppConfig appConfig;
+        internal AppConfig configFile = new AppConfig();
+        internal string configFileLocation;
 
         public MainWindow()
         {
@@ -79,7 +79,9 @@ namespace FullscreenLockConv
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
-            this.SetPlacement(Properties.Settings.Default.MainWindowPlacement);
+            configFileLocation = Directory.GetCurrentDirectory() + "\\" + DEFAULT_CONFIG;
+            configFile = ReadConfigFile(configFileLocation);
+            this.SetPlacement(configFile.MainWindowPlacement);
         }
 
         public void Dispose()
@@ -101,43 +103,63 @@ namespace FullscreenLockConv
             isDisposed = true;
         }
 
-        private void ReadSettings()
+        private void WriteConfigFile(string fileLocation)
         {
-            autoSaveOnExit = Properties.Settings.Default.AutoSaveLastUsedOptions;
-            startAltSearch = Properties.Settings.Default.StartInProcessSearchMode;
-            startExtended = Properties.Settings.Default.StartInExtendedMode;
-            startMuted = Properties.Settings.Default.StartInMutedMode;
-            startPaused = Properties.Settings.Default.StartInPausedMode;
-            startPinned = Properties.Settings.Default.StartInPinnedMode;
-            startPollingRate = Properties.Settings.Default.TimerPollingRate;
-            startSearchTarget = Properties.Settings.Default.LastKnownSearchTarget;
-            rememberSearchTarget = Properties.Settings.Default.RememberSearchTarget;
+            using (FileStream fileStream = new FileStream(fileLocation, 
+                File.Exists(fileLocation) ? FileMode.Truncate : FileMode.CreateNew, 
+                FileAccess.Write))
+            {
+                using (StreamWriter streamWriter = new StreamWriter(fileStream))
+                {
+                    var options = new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    };
+                    string jsonString = JsonSerializer.Serialize(configFile, options);
+                    streamWriter.Write(jsonString);
+                }
+            }
         }
 
-        private void ReadConfigFile(AppConfig config)
+        private AppConfig ReadConfigFile(string fileLocation)
         {
-            /*using (IsolatedStorageFile isolatedStorage = IsolatedStorageFile.GetUserStoreForAssembly())
+            if (!File.Exists(fileLocation))
             {
-                if (!isolatedStorage.FileExists(DEFAULT_CONFIG))
+                // Create a new config as we didn't find one.
+                WriteConfigFile(fileLocation);
+                LogToConsole(DEFAULT_CONFIG + " not found, creating a new one", true);
+            }
+                
+
+            using (FileStream fileStream = new FileStream(fileLocation,
+                FileMode.Open,
+                FileAccess.Read))
+            {
+                using (StreamReader streamReader = new StreamReader(fileStream))
                 {
-                    using (IsolatedStorageFileStream fileStream = new IsolatedStorageFileStream(DEFAULT_CONFIG, FileMode.CreateNew, isolatedStorage))
+                    var options = new JsonSerializerOptions
                     {
-                        using (StreamWriter writer = new StreamWriter(fileStream))
-                        {
-                            var options = new JsonSerializerOptions
-                            {
-                                WriteIndented = true
-                            };
-                            string jsonString = JsonSerializer.Serialize(new AppConfig(), options);
-                            writer.Write(jsonString);
-                        }
-                    }
+                        ReadCommentHandling = JsonCommentHandling.Skip,
+                        AllowTrailingCommas = true,
+                        IgnoreNullValues = true,
+                    };
+                    string jsonString = streamReader.ReadToEnd();
+                    return JsonSerializer.Deserialize<AppConfig>(jsonString);
                 }
+            }
+        }
 
-            }*/
-            Console.WriteLine(Directory.GetCurrentDirectory());
-            Console.WriteLine(config.GetFullPath());
-
+        private void ReadSettings()
+        {
+            autoSaveOnExit = configFile.AutoSaveLastUsedOptions;
+            startAltSearch = configFile.StartInProcessSearchMode;
+            startExtended = configFile.StartInExtendedMode;
+            startMuted = configFile.StartInMutedMode;
+            startPaused = configFile.StartInPausedMode;
+            startPinned = configFile.StartInPinnedMode;
+            startPollingRate = configFile.TimerPollingRate;
+            startSearchTarget = configFile.LastKnownSearchTarget;
+            rememberSearchTarget = configFile.RememberSearchTarget;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -163,10 +185,9 @@ namespace FullscreenLockConv
             toolTipUnpinned = TryFindResource("ToolTipUnpinned") as string;
 
             // Read settings
-            appConfig = new AppConfig(DEFAULT_CONFIG);
-            ReadConfigFile(appConfig);
             ReadSettings();
-
+            LogToConsole("Settings read from " + DEFAULT_CONFIG, true);
+            
             // Handle settings
             // AutoSaveLastUsedOptions Log
             LogToConsole("Loaded setting - AutoSaveLastUsedOptions: " + autoSaveOnExit, true);
@@ -176,9 +197,9 @@ namespace FullscreenLockConv
             {
                 btnToggleWindowExtension.Content = iconExtended;
                 btnToggleWindowExtension.ToolTip = toolTipExtended;
-                this.Height = 416;
                 isExtended = true;
             }
+            this.Height = isExtended ? 416 : 230;
             LogToConsole("Loaded setting - StartInExtendedMode: " + startExtended, true);
 
             // StartInMutedMode
@@ -326,7 +347,7 @@ namespace FullscreenLockConv
             BeginStoryboard(isExtended ? collapseWindow : extendWindow);
         }
 
-        public void UpdateStatusLabel(string strText)
+        private void UpdateStatusLabel(string strText)
         {
             Dispatcher.Invoke(() =>
             {
@@ -359,7 +380,7 @@ namespace FullscreenLockConv
             }
 
             // Options time
-            OptionsWindow optionsWindow = new OptionsWindow
+            OptionsWindow optionsWindow = new OptionsWindow(configFile)
             {
                 ShowInTaskbar = false,
                 Owner = this,
@@ -381,7 +402,7 @@ namespace FullscreenLockConv
             LogToConsole(isMuted ? "Muted audio" : "Unmuted audio");
         }
 
-        public void LogToConsole(string strText, bool bLogAnyway = false)
+        internal void LogToConsole(string strText, bool bLogAnyway = false)
         {
             if (isExtended || bLogAnyway)
             {
@@ -393,7 +414,7 @@ namespace FullscreenLockConv
             }
         }
 
-        public string GetSearchProcessName()
+        private string GetSearchProcessName()
         {
             string temp = "";
             Dispatcher.Invoke(() =>
@@ -403,17 +424,19 @@ namespace FullscreenLockConv
             return temp;
         }
 
-        public void AutoSavedSettings()
+        private void UpdateAutoSavedSettings()
         {
             // The only accessible settings that we can touch as autoSave are: Extended, Muted, Paused, Search, Pinned, and LastProcessTarget.
             // Rest must be handled via the Options dialog.
 
-            Properties.Settings.Default.StartInProcessSearchMode = isAltSearch;
-            Properties.Settings.Default.StartInExtendedMode = isExtended;
-            Properties.Settings.Default.StartInMutedMode = isMuted;
-            Properties.Settings.Default.StartInPausedMode = isPaused; // Maybe disable this from the autoSave due to potential annoyance.
-            Properties.Settings.Default.StartInPinnedMode = isPinned;
-            Properties.Settings.Default.RememberSearchTarget = rememberSearchTarget;
+            // Maybe disable this from the autoSave due to potential annoyance.
+            configFile.StartInPausedMode = isPaused;
+
+            configFile.StartInProcessSearchMode = isAltSearch;
+            configFile.StartInExtendedMode = isExtended;
+            configFile.StartInMutedMode = isMuted;
+            configFile.StartInPinnedMode = isPinned;
+            configFile.RememberSearchTarget = rememberSearchTarget;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -421,13 +444,13 @@ namespace FullscreenLockConv
             timer.Stop();
 
             if (autoSaveOnExit)
-                AutoSavedSettings();
+                UpdateAutoSavedSettings();
 
             if (rememberSearchTarget)
-                Properties.Settings.Default.LastKnownSearchTarget = GetSearchProcessName();
+                configFile.LastKnownSearchTarget = txtSearchProcessName.Text;
 
-            Properties.Settings.Default.MainWindowPlacement = this.GetPlacement();
-            Properties.Settings.Default.Save();
+            configFile.MainWindowPlacement = this.GetPlacement();
+            WriteConfigFile(configFileLocation);
 
             NativeMethods.ClipCursor(IntPtr.Zero);
         }
@@ -456,15 +479,13 @@ namespace FullscreenLockConv
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>")]
         private void About_Click(object sender, RoutedEventArgs e)
         {
-            string strVersion = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
             // Show the About dialog
+            string strVersion = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
             string messageText = "Version: " + strVersion + "\n\nBased upon the code by: ✨ Blåberry ✨\nUpdated by: Triction" +
                 "\n\nIcons provided by: Material Design Icons\nhttps://materialdesignicons.com/";
             string caption = "About";
             MessageBoxButton button = MessageBoxButton.OK;
             MessageBoxImage image = MessageBoxImage.Information;
-            //MessageBox.Show(this, messageText, caption, button, image);
-            // Replace with custom implemented MessageBox
             CustomMessageBox.Show(this, messageText, caption, button, image);
         }
     }

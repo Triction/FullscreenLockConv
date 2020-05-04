@@ -12,7 +12,7 @@ namespace FullscreenLockConv.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.5.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -20,126 +20,6 @@ namespace FullscreenLockConv.Properties {
         public static Settings Default {
             get {
                 return defaultInstance;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool StartInExtendedMode {
-            get {
-                return ((bool)(this["StartInExtendedMode"]));
-            }
-            set {
-                this["StartInExtendedMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool StartInMutedMode {
-            get {
-                return ((bool)(this["StartInMutedMode"]));
-            }
-            set {
-                this["StartInMutedMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool StartInProcessSearchMode {
-            get {
-                return ((bool)(this["StartInProcessSearchMode"]));
-            }
-            set {
-                this["StartInProcessSearchMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool StartInPausedMode {
-            get {
-                return ((bool)(this["StartInPausedMode"]));
-            }
-            set {
-                this["StartInPausedMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("500")]
-        public double TimerPollingRate {
-            get {
-                return ((double)(this["TimerPollingRate"]));
-            }
-            set {
-                this["TimerPollingRate"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool AutoSaveLastUsedOptions {
-            get {
-                return ((bool)(this["AutoSaveLastUsedOptions"]));
-            }
-            set {
-                this["AutoSaveLastUsedOptions"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string MainWindowPlacement {
-            get {
-                return ((string)(this["MainWindowPlacement"]));
-            }
-            set {
-                this["MainWindowPlacement"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool StartInPinnedMode {
-            get {
-                return ((bool)(this["StartInPinnedMode"]));
-            }
-            set {
-                this["StartInPinnedMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LastKnownSearchTarget {
-            get {
-                return ((string)(this["LastKnownSearchTarget"]));
-            }
-            set {
-                this["LastKnownSearchTarget"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool RememberSearchTarget {
-            get {
-                return ((bool)(this["RememberSearchTarget"]));
-            }
-            set {
-                this["RememberSearchTarget"] = value;
             }
         }
     }

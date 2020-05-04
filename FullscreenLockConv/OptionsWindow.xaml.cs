@@ -28,11 +28,13 @@ namespace FullscreenLockConv
         Viewbox iconSaveSaved;
         Viewbox iconSaveUnsaved;
 
+        AppConfig configFile;
         DispatcherTimer dispatcherTimer;
 
-        public OptionsWindow()
+        public OptionsWindow(AppConfig config)
         {
             InitializeComponent();
+            configFile = config;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -42,14 +44,14 @@ namespace FullscreenLockConv
             iconSaveSaved = TryFindResource("IconSaveSaved") as Viewbox;
             iconSaveUnsaved = TryFindResource("IconSaveUnsaved") as Viewbox;
 
-            oldAutoSave = Properties.Settings.Default.AutoSaveLastUsedOptions;
-            oldExtended = Properties.Settings.Default.StartInExtendedMode;
-            oldMuted = Properties.Settings.Default.StartInMutedMode;
-            oldPaused = Properties.Settings.Default.StartInPausedMode;
-            oldSearch = Properties.Settings.Default.StartInProcessSearchMode;
-            oldPolling = Convert.ToString(Properties.Settings.Default.TimerPollingRate, System.Globalization.CultureInfo.CurrentCulture);
-            oldPinned = Properties.Settings.Default.StartInPinnedMode;
-            oldSearchTarget = Properties.Settings.Default.RememberSearchTarget;
+            oldAutoSave = configFile.AutoSaveLastUsedOptions;
+            oldExtended = configFile.StartInExtendedMode;
+            oldMuted = configFile.StartInMutedMode;
+            oldPaused = configFile.StartInPausedMode;
+            oldSearch = configFile.StartInProcessSearchMode;
+            oldPolling = Convert.ToString(configFile.TimerPollingRate, System.Globalization.CultureInfo.CurrentCulture);
+            oldPinned = configFile.StartInPinnedMode;
+            oldSearchTarget = configFile.RememberSearchTarget;
 
             chkAutoSave.IsChecked = oldAutoSave;
             chkExtended.IsChecked = oldExtended;
@@ -149,16 +151,14 @@ namespace FullscreenLockConv
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.AutoSaveLastUsedOptions = (bool)chkAutoSave.IsChecked;
-            Properties.Settings.Default.StartInExtendedMode = (bool)chkExtended.IsChecked;
-            Properties.Settings.Default.StartInMutedMode = (bool)chkMuted.IsChecked;
-            Properties.Settings.Default.StartInPausedMode = (bool)chkPaused.IsChecked;
-            Properties.Settings.Default.StartInProcessSearchMode = (bool)chkProcess.IsChecked;
-            Properties.Settings.Default.TimerPollingRate = Convert.ToDouble(txtPollingRate.Text.Replace(" ", ""), System.Globalization.CultureInfo.CurrentCulture);
-            Properties.Settings.Default.StartInPinnedMode = (bool)chkTopmost.IsChecked;
-            Properties.Settings.Default.RememberSearchTarget = (bool)chkSearchTarget.IsChecked;
-
-            Properties.Settings.Default.Save();
+            configFile.AutoSaveLastUsedOptions = (bool)chkAutoSave.IsChecked;
+            configFile.StartInExtendedMode = (bool)chkExtended.IsChecked;
+            configFile.StartInMutedMode = (bool)chkMuted.IsChecked;
+            configFile.StartInPausedMode = (bool)chkPaused.IsChecked;
+            configFile.StartInProcessSearchMode = (bool)chkProcess.IsChecked;
+            configFile.TimerPollingRate = Convert.ToDouble(txtPollingRate.Text.Replace(" ", ""), System.Globalization.CultureInfo.CurrentCulture);
+            configFile.StartInPinnedMode = (bool)chkTopmost.IsChecked;
+            configFile.RememberSearchTarget = (bool)chkSearchTarget.IsChecked;
 
             DialogResult = true;
         }
