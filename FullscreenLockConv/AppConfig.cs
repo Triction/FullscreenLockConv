@@ -8,40 +8,31 @@ using System.Threading.Tasks;
 
 namespace FullscreenLockConv
 {
-    // IDEAS: Dictionary to store all config options so then we can handle all loading and saving from within the class itself.
-
     public class AppConfig
     {
-        [JsonIgnore]
-        public string ConfigDirectory { get; set; }
-        [JsonIgnore]
-        public string ConfigFile { get; set; }
-
-        // Configuration values
-        public bool AutoSaveLastUsedOptions { get; set; } = true;
-        public bool RememberSearchTarget { get; set; } = true;
-        public bool StartInExtendedMode { get; set; } = false;
-        public bool StartInMutedMode { get; set; } = false;
-        public bool StartInPausedMode { get; set; } = false;
-        public bool StartInPinnedMode { get; set; } = false;
-        public bool StartInProcessSearchMode { get; set; } = false;
-        public double TimerPollingRate { get; set; } = 500d;
+        public bool AutoSaveLastUsedOptions { get; set; }
+        public bool RememberSearchTarget { get; set; }
+        public bool StartInExtendedMode { get; set; }
+        public bool StartInMutedMode { get; set; }
+        public bool StartInPausedMode { get; set; }
+        public bool StartInPinnedMode { get; set; }
+        public bool StartInProcessSearchMode { get; set; }
+        public double TimerPollingRate { get; set; }
         public string LastKnownSearchTarget { get; set; }
         public string MainWindowPlacement { get; set; }
 
-        public AppConfig(string configFile, string configDirectory)
+        public AppConfig()
         {
-            ConfigFile = configFile;
-            ConfigDirectory = configDirectory;
-        }
-
-        public AppConfig(string configFile) : this(configFile, Directory.GetCurrentDirectory())
-        {
-        }
-
-        public string GetFullPath()
-        {
-            return Path.GetFullPath(ConfigDirectory + ConfigFile);
+            AutoSaveLastUsedOptions = true;
+            RememberSearchTarget = true;
+            StartInExtendedMode = false;
+            StartInMutedMode = false;
+            StartInPausedMode = false;
+            StartInPinnedMode = false;
+            StartInProcessSearchMode = false;
+            TimerPollingRate = 500d;
+            LastKnownSearchTarget = "";
+            MainWindowPlacement = "";
         }
     }
 }
