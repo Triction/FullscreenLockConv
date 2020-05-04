@@ -1,6 +1,9 @@
 ﻿// Part of: https://github.com/evanwon/WPFCustomMessageBox/blob/master/source/WPFCustomMessageBox
 
+using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace FullscreenLockConv
 {
@@ -275,5 +278,18 @@ namespace FullscreenLockConv
             return msg.Result;
         }
 
+        public static MessageBoxResult ShowSpecial(Window owner, List<Inline> inlines, string caption, MessageBoxButton button, MessageBoxImage image)
+        {
+            if (inlines == null)
+            {
+                throw new ArgumentNullException(nameof(inlines));
+            }
+
+            CustomMessageBoxWindow msg = new CustomMessageBoxWindow(inlines, caption, button, image);
+            msg.Owner = owner;
+            msg.ShowDialog();
+
+            return msg.Result;
+        }
     }
 }

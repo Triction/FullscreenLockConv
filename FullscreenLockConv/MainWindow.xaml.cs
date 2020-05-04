@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media.Animation;
 
 namespace FullscreenLockConv
@@ -480,13 +482,48 @@ namespace FullscreenLockConv
         private void About_Click(object sender, RoutedEventArgs e)
         {
             // Show the About dialog
-            string strVersion = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}";
-            string messageText = "Version: " + strVersion + "\n\nBased upon the code by: ✨ Blåberry ✨\nUpdated by: Triction" +
-                "\n\nIcons provided by: Material Design Icons\nhttps://materialdesignicons.com/";
+            // Hold something, we're about to go crazy
+            Run run1 = new Run($"Version: {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}\n\n" +
+                "Based upon the code by: ");
+            Run run2 = new Run("\nUpdated by: Triction\n\nButton icons provided by: Material Design Icons\n");
+            Run run3 = new Run("\n\nApp icons provided by: ");
+            Run hyperRun1 = new Run("✨ Blåberry ✨");
+            Run hyperRun2 = new Run("https://materialdesignicons.com");
+            Run hyperRun3 = new Run("https://icons8.com");
+            Hyperlink hyperlink1 = new Hyperlink(hyperRun1)
+            {
+                NavigateUri = new Uri("https://github.com/blaberry/FullscreenLock")
+            };
+            hyperlink1.RequestNavigate += new System.Windows.Navigation.RequestNavigateEventHandler(Hyperlink_RequestNavigate);
+            Hyperlink hyperlink2 = new Hyperlink(hyperRun2)
+            {
+                NavigateUri = new Uri(hyperRun2.Text)
+            };
+            hyperlink2.RequestNavigate += new System.Windows.Navigation.RequestNavigateEventHandler(Hyperlink_RequestNavigate);
+            Hyperlink hyperlink3 = new Hyperlink(hyperRun3)
+            {
+                NavigateUri = new Uri(hyperRun3.Text)
+            };
+            hyperlink3.RequestNavigate += new System.Windows.Navigation.RequestNavigateEventHandler(Hyperlink_RequestNavigate);
+            List<Inline> inlines = new List<Inline>()
+            {
+                run1,
+                hyperlink1,
+                run2,
+                hyperlink2,
+                run3,
+                hyperlink3
+            };
             string caption = "About";
             MessageBoxButton button = MessageBoxButton.OK;
             MessageBoxImage image = MessageBoxImage.Information;
-            CustomMessageBox.Show(this, messageText, caption, button, image);
+            CustomMessageBox.ShowSpecial(this, inlines, caption, button, image);
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }

@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FullscreenLockConv"
         mc:Ignorable="d"
-        x:Name="Main"
-        Title="Fullscreen Lock" Height="230" Width="600" Loaded="Window_Loaded" ResizeMode="CanMinimize" Closing="Window_Closing">
+        x:Name="Main" Title="Fullscreen Lock" Icon="Resources/icons8-system-information-16.png"
+        Height="230" Width="600" Loaded="Window_Loaded" ResizeMode="CanMinimize" Closing="Window_Closing">
     <!-- Set window height to 230 for release, 416 is for working on the extended mode layout only -->
     <Window.Resources>
         <Storyboard x:Key="ExtendWindow">

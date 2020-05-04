@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         WindowStartupLocation="CenterOwner"
         WindowStyle="SingleBorderWindow"
-        Icon="Resources/blankicon.ico"
+        Icon="Resources/icons8-system-report-16.png"
         ShowInTaskbar="False"
         ResizeMode="NoResize" SizeToContent="WidthAndHeight"
         TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="ClearType" UseLayoutRounding="True"

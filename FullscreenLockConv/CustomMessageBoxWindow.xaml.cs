@@ -1,7 +1,9 @@
 ﻿// Part of: https://github.com/evanwon/WPFCustomMessageBox/blob/master/source/WPFCustomMessageBox
 
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace FullscreenLockConv
 {
@@ -65,6 +67,19 @@ namespace FullscreenLockConv
             InitializeComponent();
 
             Message = message;
+            Caption = caption;
+            Image_MessageBox.Visibility = Visibility.Collapsed;
+            DisplayButtons(button);
+            DisplayImage(image);
+        }
+
+        internal CustomMessageBoxWindow(List<Inline> inlines, string caption, MessageBoxButton button, MessageBoxImage image)
+        {
+            InitializeComponent();
+
+            TextBlock_Message.Inlines.Clear();
+            foreach (Inline inline in inlines)
+                TextBlock_Message.Inlines.Add(inline);
             Caption = caption;
             Image_MessageBox.Visibility = Visibility.Collapsed;
             DisplayButtons(button);
