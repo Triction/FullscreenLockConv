@@ -1,0 +1,4 @@
+﻿Create an Icon.
+Set up custom configuration file using JSON.
+
+JSON: https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-how-to

@@ -1,0 +1,107 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Credit to https://materialdesignicons.com/ -->
+    <!-- Use Viewbox with a nested Canvas to display button icons, this avoids any off-centering issues -->
+    
+    <!-- Main Window Icons -->
+    <!-- volume-off -->
+    <Viewbox x:Key="IconMuted">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M12,4L9.91,6.09L12,8.18M4.27,3L3,4.27L7.73,9H3V15H7L12,20V13.27L16.25,17.53C15.58,18.04 14.83,18.46 14,18.7V20.77C15.38,20.45 16.63,19.82 17.68,18.96L19.73,21L21,19.73L12,10.73M19,12C19,12.94 18.8,13.82 18.46,14.64L19.97,16.15C20.62,14.91 21,13.5 21,12C21,7.72 18,4.14 14,3.23V5.29C16.89,6.15 19,8.83 19,12M16.5,12C16.5,10.23 15.5,8.71 14,7.97V10.18L16.45,12.63C16.5,12.43 16.5,12.21 16.5,12Z"/>
+        </Canvas>
+    </Viewbox>
+    <!-- volume-high -->
+    <Viewbox x:Key="IconUnmuted">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>
+        </Canvas>
+    </Viewbox>
+    <!-- chevron-double-down -->
+    <Viewbox x:Key="IconCollapsed">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M16.59,5.59L18,7L12,13L6,7L7.41,5.59L12,10.17L16.59,5.59M16.59,11.59L18,13L12,19L6,13L7.41,11.59L12,16.17L16.59,11.59Z"/>
+        </Canvas>
+    </Viewbox>
+    <!-- chevron-double-up -->
+    <Viewbox x:Key="IconExtended">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M7.41,18.41L6,17L12,11L18,17L16.59,18.41L12,13.83L7.41,18.41M7.41,12.41L6,11L12,5L18,11L16.59,12.41L12,7.83L7.41,12.41Z"/>
+        </Canvas>
+    </Viewbox>
+    <!-- pause -->
+    <Viewbox x:Key="IconPaused">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M14,19H18V5H14M6,19H10V5H6V19Z"/>
+        </Canvas>
+    </Viewbox>
+    <!-- play -->
+    <Viewbox x:Key="IconUnpaused">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M8,5.14V19.14L19,12.14L8,5.14Z"/>
+        </Canvas>
+    </Viewbox>
+    <!-- cog -->
+    <Viewbox x:Key="IconOptions">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+        </Canvas>
+    </Viewbox>
+    <!-- pin-off -->
+    <Viewbox x:Key="IconUnpinned">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M2,5.27L3.28,4L20,20.72L18.73,22L12.8,16.07V22H11.2V16H6V14L8,12V11.27L2,5.27M16,12L18,14V16H17.82L8,6.18V4H7V2H17V4H16V12Z"/>
+        </Canvas>
+    </Viewbox>
+    <!-- pin -->
+    <Viewbox x:Key="IconPinned">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z"/>
+        </Canvas>
+    </Viewbox>
+    <!-- information-outline -->
+    <Viewbox x:Key="IconAbout">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"/>
+        </Canvas>
+    </Viewbox>
+
+    <!-- Options Window Icons -->
+    <!-- close-outline -->
+    <Viewbox x:Key="IconCloseUnsaved" x:Shared="False">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M3,16.74L7.76,12L3,7.26L7.26,3L12,7.76L16.74,3L21,7.26L16.24,12L21,16.74L16.74,21L12,16.24L7.26,21L3,16.74M12,13.41L16.74,18.16L18.16,16.74L13.41,12L18.16,7.26L16.74,5.84L12,10.59L7.26,5.84L5.84,7.26L10.59,12L5.84,16.74L7.26,18.16L12,13.41Z" />
+        </Canvas>
+    </Viewbox>
+    <!-- close-thick -->
+    <Viewbox x:Key="IconCloseSaved" x:Shared="False">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12L20 6.91Z" />
+        </Canvas>
+    </Viewbox>
+    <!-- check-outline -->
+    <Viewbox x:Key="IconSaveUnsaved">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M19.78,2.2L24,6.42L8.44,22L0,13.55L4.22,9.33L8.44,13.55L19.78,2.2M19.78,5L8.44,16.36L4.22,12.19L2.81,13.55L8.44,19.17L21.19,6.42L19.78,5Z"/>
+        </Canvas>
+    </Viewbox>
+    <!--<Path x:Key="IconSaveUnsaved" Margin="3" Stretch="Fill" Fill="Black" Data="M19.78,2.2L24,6.42L8.44,22L0,13.55L4.22,9.33L8.44,13.55L19.78,2.2M19.78,5L8.44,16.36L4.22,12.19L2.81,13.55L8.44,19.17L21.19,6.42L19.78,5Z" RenderTransformOrigin="0.5,0.5">
+        <Path.RenderTransform>
+            <TransformGroup>
+                <ScaleTransform ScaleY="0.8"/>
+            </TransformGroup>
+        </Path.RenderTransform>
+    </Path>-->
+    <!-- check-bold -->
+    <Viewbox x:Key="IconSaveSaved">
+        <Canvas Width="24" Height="24">
+            <Path Fill="Black" Data="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"/>
+        </Canvas>
+    </Viewbox>
+    <!--<Path x:Key="IconSaveSaved" Margin="3" Stretch="Fill" Fill="Black" Data="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" RenderTransformOrigin="0.5,0.5">
+        <Path.RenderTransform>
+            <TransformGroup>
+                <ScaleTransform ScaleY="0.8"/>
+            </TransformGroup>
+        </Path.RenderTransform>
+    </Path>-->
+</ResourceDictionary>
