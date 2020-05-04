@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿// Part of: https://github.com/evanwon/WPFCustomMessageBox/blob/master/source/WPFCustomMessageBox
+
+using System.Drawing;
 using System.Windows;
 
 namespace FullscreenLockConv

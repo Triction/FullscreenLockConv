@@ -1,6 +1,6 @@
-﻿using System.Windows;
+﻿// Part of: https://github.com/evanwon/WPFCustomMessageBox/blob/master/source/WPFCustomMessageBox
 
-// WPFCustomMessageBox/CustomMessageBox.cs : https://github.com/evanwon/WPFCustomMessageBox/blob/master/source/WPFCustomMessageBox/CustomMessageBox.cs
+using System.Windows;
 
 namespace FullscreenLockConv
 {

@@ -1,11 +1,10 @@
-﻿using System;
+﻿// Part of: https://github.com/evanwon/WPFCustomMessageBox/blob/master/source/WPFCustomMessageBox
+
 using System.Drawing;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-
-// WPFCustomMessageBox/Util.cs : https://github.com/evanwon/WPFCustomMessageBox/blob/master/source/WPFCustomMessageBox/Util.cs
 
 namespace FullscreenLockConv
 {

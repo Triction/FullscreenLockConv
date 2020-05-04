@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Part of: https://docs.microsoft.com/en-us/archive/blogs/davidrickard/saving-window-size-and-location-in-wpf-and-winforms
+
+using System;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Xml;

@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿// Part of: https://stackoverflow.com/a/19326
+
+using System.Windows;
 
 namespace FullscreenLockConv
 {

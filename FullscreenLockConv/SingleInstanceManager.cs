@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualBasic.ApplicationServices;
+﻿// Part of: https://stackoverflow.com/a/19326
+
+using Microsoft.VisualBasic.ApplicationServices;
 
 namespace FullscreenLockConv
 {

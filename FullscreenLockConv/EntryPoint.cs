@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Part of: https://stackoverflow.com/a/19326
+
+using System;
 
 namespace FullscreenLockConv
 {
