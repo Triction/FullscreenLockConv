@@ -248,6 +248,7 @@ namespace FullscreenLockConv
                 btnToggleTopMost.Content = iconPinned;
                 btnToggleTopMost.ToolTip = toolTipPinned;
                 isPinned = true;
+                this.Topmost = true;
             }
             LogToConsole("Loaded setting - StartInPinnedMode: " + startPinned);
 
