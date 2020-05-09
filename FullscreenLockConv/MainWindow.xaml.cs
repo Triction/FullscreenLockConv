@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text.Json;
 using System.Timers;
 using System.Windows;
@@ -20,7 +21,7 @@ namespace FullscreenLockConv
         private const string DEFAULT_CONFIG = "config.json";
 
         // Process watcher variables
-        private Timer timer;
+        private static Timer timer;
         private Process capturedProcess;
 
         // UI Content
@@ -283,16 +284,18 @@ namespace FullscreenLockConv
                 {
                     _ = NativeMethods.GetWindowThreadProcessId(hWnd, out uint procId);
                     capturedProcess = Process.GetProcessById((int)procId);
-                    if (isAltSearch && !isMouseCaptured)
+                    bool capturedProcessTarget = false;
+                    if (isAltSearch)
                     {
                         string[] tempStrings = GetSearchProcessName().Trim().Split('.');
-                        if (!capturedProcess.ProcessName.Equals(tempStrings[0]))
-                            return false;
+                        if (capturedProcess.ProcessName.Equals(tempStrings[0]))
+                            capturedProcessTarget = true;
                     }
                     _ = NativeMethods.GetWindowRect(hWnd, out AltRect fgBounds);
                     AltRect scrnBounds = System.Windows.Forms.Screen.FromHandle(hWnd).Bounds;
                     if ((fgBounds.Bottom - fgBounds.Top) == scrnBounds.Height &&
-                        (fgBounds.Right - fgBounds.Left) == scrnBounds.Width)
+                        (fgBounds.Right - fgBounds.Left) == scrnBounds.Width &&
+                        (!isAltSearch || capturedProcessTarget))
                     {
                         if (!isMouseCaptured)
                         {
@@ -483,8 +486,7 @@ namespace FullscreenLockConv
         {
             // Show the About dialog
             // Hold something, we're about to go crazy
-            Run run1 = new Run($"Version: {System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}\n\n" +
-                "Based upon the code by: ");
+            Run run1 = new Run($"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion}\n\nBased upon the code by: ");
             Run run2 = new Run("\nUpdated by: Triction\n\nButton icons provided by: Material Design Icons\n");
             Run run3 = new Run("\n\nApp icons provided by: ");
             Run hyperRun1 = new Run("✨ Blåberry ✨");
