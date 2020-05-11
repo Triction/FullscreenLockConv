@@ -487,15 +487,17 @@ namespace FullscreenLockConv
         {
             // Show the About dialog
             // Hold something, we're about to go crazy
-            Run run1 = new Run($"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion}\n\nBased upon the code by: ");
-            Run run2 = new Run("\nUpdated by: Triction\n\nButton icons provided by: Material Design Icons\n");
-            Run run3 = new Run("\n\nApp icons provided by: ");
-            Run hyperRun1 = new Run("✨ Blåberry ✨");
+            Run run1 = new Run($"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion}\n\nOriginal code:\n");
+            Run run2 = new Run("\nIcons by:\n");
+            Run run3 = new Run(" (Buttons)\n");
+            Run run4 = new Run(" (Window / Taskbar)\n\nThis program by: Triction\n");
+            Run hyperRun1 = new Run("https://github.com/blaberry/FullscreenLock");
             Run hyperRun2 = new Run("https://materialdesignicons.com");
             Run hyperRun3 = new Run("https://icons8.com");
+            Run hyperRun4 = new Run("https://github.com/Triction/FullscreenLockConv");
             Hyperlink hyperlink1 = new Hyperlink(hyperRun1)
             {
-                NavigateUri = new Uri("https://github.com/blaberry/FullscreenLock")
+                NavigateUri = new Uri(hyperRun1.Text)
             };
             hyperlink1.RequestNavigate += new System.Windows.Navigation.RequestNavigateEventHandler(Hyperlink_RequestNavigate);
             Hyperlink hyperlink2 = new Hyperlink(hyperRun2)
@@ -508,6 +510,11 @@ namespace FullscreenLockConv
                 NavigateUri = new Uri(hyperRun3.Text)
             };
             hyperlink3.RequestNavigate += new System.Windows.Navigation.RequestNavigateEventHandler(Hyperlink_RequestNavigate);
+            Hyperlink hyperlink4 = new Hyperlink(hyperRun4)
+            {
+                NavigateUri = new Uri(hyperRun4.Text)
+            };
+            hyperlink4.RequestNavigate += new System.Windows.Navigation.RequestNavigateEventHandler(Hyperlink_RequestNavigate);
             List<Inline> inlines = new List<Inline>()
             {
                 run1,
@@ -515,7 +522,9 @@ namespace FullscreenLockConv
                 run2,
                 hyperlink2,
                 run3,
-                hyperlink3
+                hyperlink3,
+                run4,
+                hyperlink4
             };
             string caption = "About";
             MessageBoxButton button = MessageBoxButton.OK;
