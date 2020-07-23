@@ -102,7 +102,7 @@
         <Border Margin="1" Grid.Row="2" BorderBrush="#D5DFE5" BorderThickness="1" CornerRadius="3" Padding="4">
             <DockPanel>
                 <Label Content="Output:" Margin="30,0,30,0" DockPanel.Dock="Top"/>
-                <TextBox Name="txtConsoleOutput" VerticalScrollBarVisibility="Visible" IsReadOnly="True" />
+                <TextBox Name="txtConsoleOutput" VerticalScrollBarVisibility="Visible" IsReadOnly="True" FontFamily="Source Code Pro" />
             </DockPanel>
         </Border>
     </Grid>

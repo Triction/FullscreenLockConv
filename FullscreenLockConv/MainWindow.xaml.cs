@@ -190,10 +190,11 @@ namespace FullscreenLockConv
             // Read settings
             ReadSettings();
             LogToConsole("Settings read from " + DEFAULT_CONFIG, true);
-            
+
             // Handle settings
             // AutoSaveLastUsedOptions Log
-            LogToConsole("Loaded setting - AutoSaveLastUsedOptions: " + autoSaveOnExit, true);
+            string loadedSettings = "";
+            loadedSettings += "Loaded setting - AutoSaveLastUsedOptions: " + autoSaveOnExit;
 
             // StartInExtendedMode
             if (startExtended)
@@ -202,8 +203,9 @@ namespace FullscreenLockConv
                 btnToggleWindowExtension.ToolTip = toolTipExtended;
                 isExtended = true;
             }
+            // TODO: convert height variables to constants for both UI and backend.
             this.Height = isExtended ? 416 : 230;
-            LogToConsole("Loaded setting - StartInExtendedMode: " + startExtended, true);
+            loadedSettings += "\nLoaded setting - StartInExtendedMode: " + startExtended;
 
             // StartInMutedMode
             if (startMuted)
@@ -212,7 +214,7 @@ namespace FullscreenLockConv
                 btnMute.ToolTip = toolTipMuted;
                 isMuted = true;
             }
-            LogToConsole("Loaded setting - StartInMutedMode: " + startMuted, true);
+            loadedSettings += "\nLoaded setting - StartInMutedMode: " + startMuted;
 
             // StartInProcessSearchMode
             if (startAltSearch)
@@ -221,15 +223,15 @@ namespace FullscreenLockConv
                 rdbForeground.IsChecked = true;
 
             isAltSearch = startAltSearch;
-            LogToConsole("Loaded setting - StartInProcessSearchMode: " + startAltSearch, true);
+            loadedSettings += "\nLoaded setting - StartInProcessSearchMode: " + startAltSearch;
 
             // RememberSearchTarget
-            LogToConsole("Loaded setting - RememberSearchTarget: " + rememberSearchTarget, true);
+            loadedSettings += "\nLoaded setting - RememberSearchTarget: " + rememberSearchTarget;
             if (rememberSearchTarget)
             {
                 // LastKnownSearchTarget
                 txtSearchProcessName.Text = startSearchTarget;
-                LogToConsole("Loaded setting - LastKnownSearchTarget: " + startSearchTarget, true);
+                loadedSettings += "\nLoaded setting - LastKnownSearchTarget: " + startSearchTarget;
             }   
 
             // StartInPausedMode
@@ -240,7 +242,7 @@ namespace FullscreenLockConv
                 isPaused = true;
             }
             UpdateStatusLabel(startPaused ? "Paused" : "Waiting");
-            LogToConsole("Loaded setting - StartInPausedMode: " + startPaused, true);
+            loadedSettings += "\nLoaded setting - StartInPausedMode: " + startPaused;
 
             // StartInPinnedMode
             if (startPinned)
@@ -250,11 +252,13 @@ namespace FullscreenLockConv
                 isPinned = true;
                 this.Topmost = true;
             }
-            LogToConsole("Loaded setting - StartInPinnedMode: " + startPinned);
+            loadedSettings += "\nLoaded setting - StartInPinnedMode: " + startPinned;
 
             // TimerPollingRate Log
-            LogToConsole("Loaded setting - TimerPollingRate: " + startPollingRate, true);
+            loadedSettings += "\nLoaded setting - TimerPollingRate: " + startPollingRate;
+
             // Finished loading settings
+            LogToConsole(loadedSettings, true);
 
             // Launch timer last
             timer = new Timer(startPollingRate);
@@ -306,9 +310,7 @@ namespace FullscreenLockConv
                                 NativeMethods.Beep(500, 20);
                                 NativeMethods.Beep(700, 20);
                             }
-                            LogToConsole("Captured mouse cursor to");
-                            LogToConsole("process: " + capturedProcess.ProcessName);
-                            LogToConsole("title: " + capturedProcess.MainWindowTitle);
+                            LogToConsole("Captured mouse cursor to\nprocess: " + capturedProcess.ProcessName + "\ntitle: " + capturedProcess.MainWindowTitle);
                         }
                         NativeMethods.ClipCursor(ref scrnBounds);
                         return true;
@@ -486,9 +488,9 @@ namespace FullscreenLockConv
         private void About_Click(object sender, RoutedEventArgs e)
         {
             // Show the About dialog
-            // Hold something, we're about to go crazy
+            // Hold something, we're going crazy
             Run run1 = new Run($"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion}\n\nOriginal code:\n");
-            Run run2 = new Run("\nIcons by:\n");
+            Run run2 = new Run("\n\nIcons by:\n");
             Run run3 = new Run(" (Buttons)\n");
             Run run4 = new Run(" (Window / Taskbar)\n\nThis program by: Triction\n");
             Run hyperRun1 = new Run("https://github.com/blaberry/FullscreenLock");
