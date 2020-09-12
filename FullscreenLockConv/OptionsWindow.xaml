@@ -39,7 +39,7 @@
                     <TextBox Name="txtPollingRate" Width="140" HorizontalContentAlignment="Right" VerticalContentAlignment="Center"
                              ToolTip="{StaticResource ToolTipPollingRate}" TextChanged="TxtPollingRate_TextChanged"
                              AllowDrop="False" PreviewTextInput="TxtPollingRate_PreviewTextInput"/>
-                    <Label Name="lblPollingRate" Content="ms. Timer polling rate in milliseconds (requires app restart)." />
+                    <Label Name="lblPollingRate" Content="ms. Timer polling rate in milliseconds." />
                 </StackPanel>
                 <CheckBox Name="chkSearchTarget" Content="Remember last used search target." Click="ChkSearchTarget_Click"/>
                 <CheckBox Name="chkAutoSave" Content="Save last used settings on exit." Click="ChkAutoSave_Click"/>
