@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
@@ -395,7 +396,11 @@ namespace FullscreenLockConv
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
             if ((bool)optionsWindow.ShowDialog())
+            {
                 ReadSettings();
+                LogToConsole($"Changed timer interval from {timer.Interval.ToString(CultureInfo.CurrentCulture)}ms to {startPollingRate.ToString(CultureInfo.CurrentCulture)}ms.");
+                timer.Interval = startPollingRate;
+            }
 
             // Stop temp pause if enabled
             if (optionsPause)
