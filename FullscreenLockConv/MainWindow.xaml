@@ -45,7 +45,7 @@
                 </Grid>
                 <Label Name="lblSearchProcess" Content="Enter process name:"/>
                 <Grid Background="White">
-                    <TextBox Name="txtSearchProcessName" Height="22">
+                    <TextBox Name="txtSearchProcessName" Height="22" TextChanged="txtSearchProcessName_TextChanged">
                         <TextBox.Style>
                             <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
                                 <Style.Resources>

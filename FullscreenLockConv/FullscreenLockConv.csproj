@@ -204,5 +204,8 @@
   <ItemGroup>
     <Resource Include="Resources\Images\icons8_system_information_16.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Tasks.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

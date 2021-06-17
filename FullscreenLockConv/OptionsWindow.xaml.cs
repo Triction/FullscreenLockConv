@@ -44,14 +44,14 @@ namespace FullscreenLockConv
             iconSaveSaved = TryFindResource("IconSaveSaved") as Viewbox;
             iconSaveUnsaved = TryFindResource("IconSaveUnsaved") as Viewbox;
 
-            oldAutoSave = configFile.AutoSaveLastUsedOptions;
-            oldExtended = configFile.StartInExtendedMode;
-            oldMuted = configFile.StartInMutedMode;
-            oldPaused = configFile.StartInPausedMode;
-            oldSearch = configFile.StartInProcessSearchMode;
-            oldPolling = Convert.ToString(configFile.TimerPollingRate, System.Globalization.CultureInfo.CurrentCulture);
-            oldPinned = configFile.StartInPinnedMode;
-            oldSearchTarget = configFile.RememberSearchTarget;
+            oldAutoSave = configFile.AutoSaveConfig;
+            oldExtended = configFile.ExtendedMode;
+            oldMuted = configFile.MutedMode;
+            oldPaused = configFile.PausedMode;
+            oldSearch = configFile.ProcessSearchMode;
+            oldPolling = Convert.ToString(configFile.TimerInterval, System.Globalization.CultureInfo.CurrentCulture);
+            oldPinned = configFile.PinnedMode;
+            oldSearchTarget = configFile.SaveProcessName;
 
             chkAutoSave.IsChecked = oldAutoSave;
             chkExtended.IsChecked = oldExtended;
@@ -151,14 +151,14 @@ namespace FullscreenLockConv
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            configFile.AutoSaveLastUsedOptions = (bool)chkAutoSave.IsChecked;
-            configFile.StartInExtendedMode = (bool)chkExtended.IsChecked;
-            configFile.StartInMutedMode = (bool)chkMuted.IsChecked;
-            configFile.StartInPausedMode = (bool)chkPaused.IsChecked;
-            configFile.StartInProcessSearchMode = (bool)chkProcess.IsChecked;
-            configFile.TimerPollingRate = Convert.ToDouble(txtPollingRate.Text.Replace(" ", ""), System.Globalization.CultureInfo.CurrentCulture);
-            configFile.StartInPinnedMode = (bool)chkTopmost.IsChecked;
-            configFile.RememberSearchTarget = (bool)chkSearchTarget.IsChecked;
+            configFile.AutoSaveConfig = (bool)chkAutoSave.IsChecked;
+            configFile.ExtendedMode = (bool)chkExtended.IsChecked;
+            configFile.MutedMode = (bool)chkMuted.IsChecked;
+            configFile.PausedMode = (bool)chkPaused.IsChecked;
+            configFile.ProcessSearchMode = (bool)chkProcess.IsChecked;
+            configFile.TimerInterval = Convert.ToDouble(txtPollingRate.Text.Replace(" ", ""), System.Globalization.CultureInfo.CurrentCulture);
+            configFile.PinnedMode = (bool)chkTopmost.IsChecked;
+            configFile.SaveProcessName = (bool)chkSearchTarget.IsChecked;
 
             DialogResult = true;
         }

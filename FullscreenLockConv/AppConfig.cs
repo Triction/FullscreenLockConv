@@ -2,29 +2,29 @@
 {
     public class AppConfig
     {
-        public bool AutoSaveLastUsedOptions { get; set; }
-        public bool RememberSearchTarget { get; set; }
-        public bool StartInExtendedMode { get; set; }
-        public bool StartInMutedMode { get; set; }
-        public bool StartInPausedMode { get; set; }
-        public bool StartInPinnedMode { get; set; }
-        public bool StartInProcessSearchMode { get; set; }
-        public double TimerPollingRate { get; set; }
-        public string LastKnownSearchTarget { get; set; }
-        public string MainWindowPlacement { get; set; }
+        public bool AutoSaveConfig { get; set; }
+        public bool ExtendedMode { get; set; }
+        public bool MutedMode { get; set; }
+        public bool PausedMode { get; set; }
+        public bool PinnedMode { get; set; }
+        public bool ProcessSearchMode { get; set; }
+        public bool SaveProcessName { get; set; }
+        public string Process { get; set; }
+        public double TimerInterval { get; set; }
+        public string WindowPosition { get; set; }
 
         public AppConfig()
         {
-            AutoSaveLastUsedOptions = true;
-            RememberSearchTarget = true;
-            StartInExtendedMode = false;
-            StartInMutedMode = false;
-            StartInPausedMode = false;
-            StartInPinnedMode = false;
-            StartInProcessSearchMode = false;
-            TimerPollingRate = 500d;
-            LastKnownSearchTarget = "";
-            MainWindowPlacement = "";
+            AutoSaveConfig = true;
+            ExtendedMode = false;
+            MutedMode = false;
+            PausedMode = false;
+            PinnedMode = false;
+            ProcessSearchMode = false;
+            SaveProcessName = true;
+            Process = "";
+            TimerInterval = 500d;
+            WindowPosition = "";
         }
     }
 }

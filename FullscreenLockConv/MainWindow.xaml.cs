@@ -25,6 +25,9 @@ namespace FullscreenLockConv
         private static Timer timer;
         private Process capturedProcess;
 
+        // Background Save timer
+        private static Timer fileTimer;
+
         // UI Content
         // Storyboard Animations
         private Storyboard extendWindow;
@@ -71,6 +74,8 @@ namespace FullscreenLockConv
         private bool isPinned;
 
         private bool isDisposed;
+        private bool hasSaved = true;
+        private bool startUp = true;
 
         internal AppConfig configFile = new AppConfig();
         internal string configFileLocation;
@@ -85,7 +90,7 @@ namespace FullscreenLockConv
             base.OnSourceInitialized(e);
             configFileLocation = Directory.GetCurrentDirectory() + "\\" + DEFAULT_CONFIG;
             configFile = ReadConfigFile(configFileLocation);
-            this.SetPlacement(configFile.MainWindowPlacement);
+            this.SetPlacement(configFile.WindowPosition);
         }
 
         public void Dispose()
@@ -102,6 +107,7 @@ namespace FullscreenLockConv
             {
                 capturedProcess.Dispose();
                 timer.Dispose();
+                fileTimer.Dispose();
             }
 
             isDisposed = true;
@@ -155,15 +161,15 @@ namespace FullscreenLockConv
 
         private void ReadSettings()
         {
-            autoSaveOnExit = configFile.AutoSaveLastUsedOptions;
-            startAltSearch = configFile.StartInProcessSearchMode;
-            startExtended = configFile.StartInExtendedMode;
-            startMuted = configFile.StartInMutedMode;
-            startPaused = configFile.StartInPausedMode;
-            startPinned = configFile.StartInPinnedMode;
-            startPollingRate = configFile.TimerPollingRate;
-            startSearchTarget = configFile.LastKnownSearchTarget;
-            rememberSearchTarget = configFile.RememberSearchTarget;
+            autoSaveOnExit = configFile.AutoSaveConfig;
+            startAltSearch = configFile.ProcessSearchMode;
+            startExtended = configFile.ExtendedMode;
+            startMuted = configFile.MutedMode;
+            startPaused = configFile.PausedMode;
+            startPinned = configFile.PinnedMode;
+            startPollingRate = configFile.TimerInterval;
+            startSearchTarget = configFile.Process;
+            rememberSearchTarget = configFile.SaveProcessName;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -190,12 +196,12 @@ namespace FullscreenLockConv
 
             // Read settings
             ReadSettings();
-            LogToConsole("Settings read from " + DEFAULT_CONFIG, true);
+            LogToConsole("Read settings from " + DEFAULT_CONFIG, true);
 
             // Handle settings
             // AutoSaveLastUsedOptions Log
             string loadedSettings = "";
-            loadedSettings += "Loaded setting - AutoSaveLastUsedOptions: " + autoSaveOnExit;
+            loadedSettings += "Loaded setting - AutoSaveConfig: " + autoSaveOnExit;
 
             // StartInExtendedMode
             if (startExtended)
@@ -206,7 +212,7 @@ namespace FullscreenLockConv
             }
             // TODO: convert height variables to constants for both UI and backend.
             this.Height = isExtended ? 416 : 230;
-            loadedSettings += "\nLoaded setting - StartInExtendedMode: " + startExtended;
+            loadedSettings += "\nLoaded setting - ExtendedMode: " + startExtended;
 
             // StartInMutedMode
             if (startMuted)
@@ -215,7 +221,7 @@ namespace FullscreenLockConv
                 btnMute.ToolTip = toolTipMuted;
                 isMuted = true;
             }
-            loadedSettings += "\nLoaded setting - StartInMutedMode: " + startMuted;
+            loadedSettings += "\nLoaded setting - MutedMode: " + startMuted;
 
             // StartInProcessSearchMode
             if (startAltSearch)
@@ -224,15 +230,15 @@ namespace FullscreenLockConv
                 rdbForeground.IsChecked = true;
 
             isAltSearch = startAltSearch;
-            loadedSettings += "\nLoaded setting - StartInProcessSearchMode: " + startAltSearch;
+            loadedSettings += "\nLoaded setting - ProcessSearchMode: " + startAltSearch;
 
             // RememberSearchTarget
-            loadedSettings += "\nLoaded setting - RememberSearchTarget: " + rememberSearchTarget;
+            loadedSettings += "\nLoaded setting - SaveProcessName: " + rememberSearchTarget;
             if (rememberSearchTarget)
             {
                 // LastKnownSearchTarget
                 txtSearchProcessName.Text = startSearchTarget;
-                loadedSettings += "\nLoaded setting - LastKnownSearchTarget: " + startSearchTarget;
+                loadedSettings += "\nLoaded setting - Process: " + startSearchTarget;
             }   
 
             // StartInPausedMode
@@ -243,7 +249,7 @@ namespace FullscreenLockConv
                 isPaused = true;
             }
             UpdateStatusLabel(startPaused ? "Paused" : "Waiting");
-            loadedSettings += "\nLoaded setting - StartInPausedMode: " + startPaused;
+            loadedSettings += "\nLoaded setting - PausedMode: " + startPaused;
 
             // StartInPinnedMode
             if (startPinned)
@@ -253,10 +259,10 @@ namespace FullscreenLockConv
                 isPinned = true;
                 this.Topmost = true;
             }
-            loadedSettings += "\nLoaded setting - StartInPinnedMode: " + startPinned;
+            loadedSettings += "\nLoaded setting - PinnedMode: " + startPinned;
 
             // TimerPollingRate Log
-            loadedSettings += "\nLoaded setting - TimerPollingRate: " + startPollingRate;
+            loadedSettings += "\nLoaded setting - TimerInterval: " + startPollingRate;
 
             // Finished loading settings
             LogToConsole(loadedSettings, true);
@@ -268,6 +274,29 @@ namespace FullscreenLockConv
                 timer.Start();
 
             LogToConsole("Timer initialized" + (timer.Enabled ? " and started" : "") + " with interval of " + timer.Interval + "ms", true);
+
+            // Background timer to auto-save config
+            // Set currently to 10 minute intervals
+            fileTimer = new Timer();
+            fileTimer.Interval = TimeSpan.FromMinutes(10).TotalMilliseconds;
+            fileTimer.Elapsed += FileTimer_Elapsed;
+            fileTimer.Start();
+
+            startUp = false;
+        }
+
+        private void FileTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (!hasSaved)
+            {
+                LogToConsole("Auto-saving config", true);
+                Dispatcher.Invoke(() =>
+                {
+                    SaveConfig();
+                });
+
+                hasSaved = true;
+            }
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -352,6 +381,9 @@ namespace FullscreenLockConv
 
         private void BtnToggleWindowExtension_Click(object sender, RoutedEventArgs e)
         {
+            if (hasSaved && autoSaveOnExit)
+                hasSaved = false;
+
             btnToggleWindowExtension.IsEnabled = false;
             BeginStoryboard(isExtended ? collapseWindow : extendWindow);
         }
@@ -366,6 +398,9 @@ namespace FullscreenLockConv
 
         private void BtnPause_Click(object sender, RoutedEventArgs e)
         {
+            if (hasSaved && autoSaveOnExit)
+                hasSaved = false;
+
             isPaused = !isPaused;
             if (isPaused)
                 timer.Stop();
@@ -385,7 +420,12 @@ namespace FullscreenLockConv
             if (!isPaused)
             {
                 optionsPause = true;
-                BtnPause_Click(sender, e);
+                timer.Stop();
+                fileTimer.Stop();
+                btnPause.Content = iconPaused;
+                btnPause.ToolTip = toolTipPaused;
+                UpdateStatusLabel("Paused");
+                LogToConsole("Paused, no longer watching for window");
             }
 
             // Options time
@@ -398,17 +438,30 @@ namespace FullscreenLockConv
             if ((bool)optionsWindow.ShowDialog())
             {
                 ReadSettings();
-                LogToConsole($"Changed timer interval from {timer.Interval.ToString(CultureInfo.CurrentCulture)}ms to {startPollingRate.ToString(CultureInfo.CurrentCulture)}ms.");
+                LogToConsole($"Changed timer interval from {timer.Interval.ToString(CultureInfo.CurrentCulture)}ms to {startPollingRate.ToString(CultureInfo.CurrentCulture)}ms");
                 timer.Interval = startPollingRate;
+
+                if (hasSaved)
+                    hasSaved = false;
             }
 
             // Stop temp pause if enabled
             if (optionsPause)
-                BtnPause_Click(sender, e);
+            {
+                timer.Start();
+                fileTimer.Start();
+                btnPause.Content = iconUnpaused;
+                btnPause.ToolTip = toolTipUnpaused;
+                UpdateStatusLabel("Waiting");
+                LogToConsole("Unpaused, waiting for window focus");
+            }
         }
 
         private void BtnMute_Click(object sender, RoutedEventArgs e)
         {
+            if (hasSaved && autoSaveOnExit)
+                hasSaved = false;
+
             isMuted = !isMuted;
             btnMute.Content = isMuted ? iconMuted : iconUnmuted;
             btnMute.ToolTip = isMuted ? toolTipMuted : toolTipUnmuted;
@@ -443,29 +496,38 @@ namespace FullscreenLockConv
             // Rest must be handled via the Options dialog.
 
             // Maybe disable this from the autoSave due to potential annoyance.
-            configFile.StartInPausedMode = isPaused;
+            configFile.PausedMode = isPaused;
 
-            configFile.StartInProcessSearchMode = isAltSearch;
-            configFile.StartInExtendedMode = isExtended;
-            configFile.StartInMutedMode = isMuted;
-            configFile.StartInPinnedMode = isPinned;
-            configFile.RememberSearchTarget = rememberSearchTarget;
+            configFile.ProcessSearchMode = isAltSearch;
+            configFile.ExtendedMode = isExtended;
+            configFile.MutedMode = isMuted;
+            configFile.PinnedMode = isPinned;
+            configFile.SaveProcessName = rememberSearchTarget;
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void SaveConfig()
         {
-            timer.Stop();
-
             if (autoSaveOnExit)
                 UpdateAutoSavedSettings();
 
             if (rememberSearchTarget)
-                configFile.LastKnownSearchTarget = txtSearchProcessName.Text;
+                configFile.Process = txtSearchProcessName.Text;
 
-            configFile.MainWindowPlacement = this.GetPlacement();
+            configFile.WindowPosition = this.GetPlacement();
             WriteConfigFile(configFileLocation);
+        }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Hide();
+            timer.Stop();
+            fileTimer.Stop();
+
+            if (!hasSaved)
+                SaveConfig();
+            
             NativeMethods.ClipCursor(IntPtr.Zero);
+            Dispose();
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
@@ -476,12 +538,18 @@ namespace FullscreenLockConv
 
         private void RdbSearchMode_Checked(object sender, RoutedEventArgs e)
         {
+            if (hasSaved && autoSaveOnExit && !startUp)
+                hasSaved = false;
+
             isAltSearch = (bool)rdbProcess.IsChecked;
             ToggleSearchProcessControls(isAltSearch);
         }
 
         private void BtnToggleTopMost_Click(object sender, RoutedEventArgs e)
         {
+            if (hasSaved && autoSaveOnExit)
+                hasSaved = false;
+            
             isPinned = !isPinned;
             this.Topmost = isPinned;
             btnToggleTopMost.Content = isPinned ? iconPinned : iconUnpinned;
@@ -494,14 +562,15 @@ namespace FullscreenLockConv
         {
             // Show the About dialog
             // Hold something, we're going crazy
-            Run run1 = new Run($"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion}\n\nOriginal code:\n");
-            Run run2 = new Run("\n\nIcons by:\n");
-            Run run3 = new Run(" (Buttons)\n");
-            Run run4 = new Run(" (Window / Taskbar)\n\nThis program by: Triction\n");
-            Run hyperRun1 = new Run("https://github.com/blaberry/FullscreenLock");
-            Run hyperRun2 = new Run("https://materialdesignicons.com");
-            Run hyperRun3 = new Run("https://icons8.com");
-            Run hyperRun4 = new Run("https://github.com/Triction/FullscreenLockConv");
+            Run run1 = new Run($"Version: {FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion}\n\nGitHub page:\n");
+            Run run2 = new Run("\n\nBased on:\n");
+            Run run3 = new Run("\n\nIcons by:\n");
+            Run run4 = new Run(" (Buttons)\n");
+            Run run5 = new Run(" (Window / Taskbar)");
+            Run hyperRun1 = new Run("https://github.com/Triction/FullscreenLockConv");
+            Run hyperRun2 = new Run("https://github.com/blaberry/FullscreenLock");
+            Run hyperRun3 = new Run("https://materialdesignicons.com");
+            Run hyperRun4 = new Run("https://icons8.com");
             Hyperlink hyperlink1 = new Hyperlink(hyperRun1)
             {
                 NavigateUri = new Uri(hyperRun1.Text)
@@ -531,7 +600,8 @@ namespace FullscreenLockConv
                 run3,
                 hyperlink3,
                 run4,
-                hyperlink4
+                hyperlink4,
+                run5
             };
             string caption = "About";
             MessageBoxButton button = MessageBoxButton.OK;
@@ -543,6 +613,12 @@ namespace FullscreenLockConv
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
+        }
+
+        private void txtSearchProcessName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (hasSaved && autoSaveOnExit && !startUp)
+                hasSaved = false;
         }
     }
 }
